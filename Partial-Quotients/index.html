@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partial Quotients Division</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+    }
+
+    .app {
+      width: min(760px, 100%);
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 28px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.7rem, 4vw, 2.2rem);
+    }
+
+    .intro {
+      margin: 0 0 24px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      align-items: end;
+    }
+
+    .field {
+      display: grid;
+      gap: 7px;
+    }
+
+    label {
+      font-weight: 650;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      font: inherit;
+      font-size: 1.05rem;
+      background: white;
+    }
+
+    input:focus {
+      outline: 3px solid rgba(37, 99, 235, 0.16);
+      border-color: #2563eb;
+    }
+
+    button {
+      grid-column: 1 / -1;
+      justify-self: start;
+      padding: 11px 18px;
+      border: 0;
+      border-radius: 10px;
+      background: #2563eb;
+      color: white;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    .error {
+      min-height: 1.4em;
+      margin: 12px 0 0;
+      color: #b91c1c;
+      font-weight: 600;
+    }
+
+    .result-card {
+      display: none;
+      margin-top: 22px;
+      padding: 18px;
+      overflow-x: auto;
+      border: 1px solid #dbe3ec;
+      border-radius: 12px;
+      background: #f8fafc;
+    }
+
+    .result-card.visible {
+      display: block;
+    }
+
+    pre {
+      margin: 0;
+      font-family: "Cascadia Mono", "SFMono-Regular", Consolas, monospace;
+      font-size: 0.98rem;
+      line-height: 1.45;
+      white-space: pre;
+    }
+
+    @media (max-width: 560px) {
+      .app {
+        padding: 20px;
+      }
+
+      form {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <h1>Partial Quotients Division</h1>
+    <p class="intro">Solve long division using partial quotients of at most 10.</p>
+
+    <form id="division-form">
+      <div class="field">
+        <label for="dividend">Dividend</label>
+        <input type="number" id="dividend" min="0" step="1" inputmode="numeric" placeholder="1482" required>
+      </div>
+
+      <div class="field">
+        <label for="divisor">Divisor</label>
+        <input type="number" id="divisor" min="1" step="1" inputmode="numeric" placeholder="12" required>
+      </div>
+
+      <button type="submit">Compute</button>
+    </form>
+
+    <p class="error" id="error" role="alert"></p>
+
+    <section class="result-card" id="result-card" aria-live="polite">
+      <pre id="results"></pre>
+    </section>
+  </main>
+
+  <script>
+    document.getElementById("division-form").addEventListener("submit", function (event) {
+      event.preventDefault()
+      displayPartialDividends()
+    })
+
+    function displayPartialDividends() {
+      const dividend = Number(document.getElementById("dividend").value)
+      const divisor = Number(document.getElementById("divisor").value)
+      const error = document.getElementById("error")
+      const resultCard = document.getElementById("result-card")
+      const results = document.getElementById("results")
+
+      error.textContent = ""
+      resultCard.classList.remove("visible")
+
+      if (!Number.isInteger(dividend) || dividend < 0) {
+        error.textContent = "Enter a whole-number dividend of 0 or greater."
+        return
+      }
+
+      if (!Number.isInteger(divisor) || divisor <= 0) {
+        error.textContent = "Enter a whole-number divisor greater than 0."
+        return
+      }
+
+      const format = number => number.toLocaleString("en-US")
+      const tenspace = " ".repeat(8)
+
+      let x = dividend
+      const y = divisor
+      let z
+      let sumz = 0
+
+      const leftLabel = `${format(y)} | `
+      const rightdigit = leftLabel.length + format(dividend).length
+      const rule = "─".repeat(rightdigit + 2)
+      const lines = []
+      const partialQuotients = []
+      const quotientColumn = rightdigit + 30
+
+      const withQuotient = (left, q = "") => {
+        const padding = " ".repeat(Math.max(2, quotientColumn - left.length))
+        return left + padding + "| " + q
+      }
+
+      lines.push(rule)
+      lines.push(leftLabel + format(dividend))
+      lines.push("")
+
+      // Same partial-quotients approach as the original:
+      // start at 10, step down until the product fits, subtract, repeat.
+      while (y <= x) {
+        z = 10
+
+        while (z * y > x) {
+          z += -1
+        }
+
+        const product = z * y
+        const productText = format(product)
+
+        const subtractionLine =
+          " ".repeat(Math.max(0, rightdigit - productText.length - 2)) +
+          "- " + productText +
+          tenspace + "← " + format(y) + " × " + z
+
+        lines.push(withQuotient(subtractionLine, String(z)))
+
+        lines.push(
+          " ".repeat(Math.max(0, rightdigit - productText.length - 2)) +
+          "─".repeat(productText.length + 2)
+        )
+
+        x += -1 * z * y
+        sumz += z
+        partialQuotients.push(z)
+
+        const remainderText = format(x)
+        lines.push(" ".repeat(Math.max(0, rightdigit - remainderText.length)) + remainderText)
+      }
+
+      if (partialQuotients.length > 0) {
+        lines.push(withQuotient("", "─".repeat(String(sumz).length)))
+        lines.push(withQuotient("", format(sumz)))
+      }
+
+      lines.push("")
+      lines.push(rule)
+
+      const decimalAnswer = dividend / divisor
+      const decimalText = Number.isInteger(decimalAnswer)
+        ? String(decimalAnswer)
+        : decimalAnswer.toFixed(3).replace(/0+$/, "").replace(/\.$/, "")
+
+      lines.push(
+        `${format(dividend)} ÷ ${format(divisor)} = ${format(sumz)} + ` +
+        `(${format(x)} / ${format(divisor)}) = ${decimalText}`
+      )
+
+      results.textContent = lines.join("\n")
+      resultCard.classList.add("visible")
+    }
+  </script>
+</body>
+</html>
