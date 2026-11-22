@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Multiplication Table | Math Tools</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #1f2937;
+      background: #f5f6f8;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    button, input { font: inherit; }
+    .app { max-width: 1030px; margin: 0 auto; padding: 32px 20px 64px; }
+    .back { display: inline-block; color: #45566e; font-size: .875rem; text-decoration: none; margin-bottom: 16px; }
+    .back:hover { text-decoration: underline; }
+    h1 { font-size: clamp(1.65rem, 4vw, 2.15rem); line-height: 1.15; letter-spacing: -.035em; margin: 0 0 8px; }
+    .description { margin: 0 0 24px; color: #526072; line-height: 1.5; }
+    .controls {
+      display: flex; flex-wrap: wrap; align-items: end; gap: 14px 16px;
+      background: #fff; border: 1px solid #dde3ea; border-radius: 10px;
+      padding: 18px; margin-bottom: 12px;
+    }
+    .field { display: grid; gap: 6px; }
+    .field label { font-size: .84rem; font-weight: 650; }
+    .field input { width: 105px; height: 43px; padding: 0 12px; border: 1px solid #bcc6d2; border-radius: 6px; background: #fff; color: inherit; }
+    .field input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid #9ac6ff; outline-offset: 2px; }
+    .option { display: flex; align-items: center; gap: 8px; min-height: 43px; font-size: .92rem; cursor: pointer; user-select: none; }
+    .option input { width: 16px; height: 16px; accent-color: #243c58; }
+    .grow { flex: 1 1 14px; }
+    .actions { display: flex; align-items: center; gap: 10px; }
+    button { cursor: pointer; border-radius: 6px; border: 1px solid #b9c3cf; background: #fff; padding: 11px 16px; min-height: 43px; font-weight: 600; }
+    button:hover { background: #f3f5f7; }
+    .primary { background: #213c5a; border-color: #213c5a; color: #fff; }
+    .primary:hover { background: #152a43; }
+    .hint { font-size: .83rem; color: #657286; margin: 0 0 20px 2px; }
+    .message { margin: -6px 0 16px 2px; min-height: 1.25em; color: #a33b2e; font-size: .875rem; }
+    .sheet {
+      width: 8.5in; max-width: 100%; margin: 0 auto; padding: .5in .46in .42in;
+      background: #fff; border: 1px solid #e0e5eb; box-shadow: 0 6px 25px #1f29370c;
+      min-height: 10.15in;
+    }
+    .sheet-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px; margin-bottom: 20px; }
+    .sheet-title { font-size: 1.35rem; line-height: 1.25; font-weight: 750; letter-spacing: -.035em; margin: 0 0 4px; color: #17283c; }
+    .sheet-subtitle { font-size: .87rem; color: #5e6978; margin: 0; }
+    .name-date { display: none; font-size: .78rem; color: #49576b; gap: 12px; }
+    .name-date span { white-space: nowrap; }
+    .name-line { display: inline-block; border-bottom: 1px solid #87909d; width: 150px; margin-left: 4px; }
+    .table-wrap { width: 100%; }
+    table {
+      border-collapse: collapse; border-spacing: 0; table-layout: fixed; width: 100%;
+      font-variant-numeric: tabular-nums; text-align: center;
+      font-size: var(--font-size, 16px); color: #263548;
+    }
+    th, td { border: 1px solid #b6c0cb; text-align: center; padding: 0 1px; overflow: hidden; }
+    tr { height: var(--row-height-screen, 55px); }
+    thead th, tbody th { background: #eef2f6; font-weight: 750; color: #203955; }
+    thead th:first-child { background: #dfe8f1; font-size: 1.15em; }
+    tbody td { font-weight: 520; }
+    .empty-answer { color: transparent; }
+    .sheet-footer { color: #8995a4; font-size: .67rem; text-align: right; padding-top: 13px; }
+    @media (max-width: 760px) {
+      .app { padding: 24px 12px 40px; }
+      .controls { padding: 14px; gap: 12px; }
+      .field input { width: 86px; }
+      .grow { flex-basis: 100%; height: 0; }
+      .actions { width: 100%; }
+      .actions button { flex: 1; }
+      .sheet { padding: 20px 11px; min-height: 0; }
+      .sheet-head { margin-bottom: 14px; }
+      .sheet-title { font-size: 1.1rem; }
+      tr { height: var(--row-height-screen, 24px); }
+      table { font-size: var(--mobile-font-size, 10px); }
+      .sheet-footer { padding-top: 10px; }
+    }
+    @page { size: letter portrait; margin: .45in; }
+    @media print {
+      :root { background: #fff; }
+      html, body { width: 100%; margin: 0 !important; padding: 0 !important; background: white !important; }
+      .app { max-width: none; margin: 0; padding: 0; }
+      .back, .screen-heading, .controls, .hint, .message { display: none !important; }
+      .sheet {
+        margin: 0; padding: 0; width: 100%; max-width: none; min-height: 0;
+        border: none; box-shadow: none; background: #fff;
+      }
+      .sheet-head { margin: 0 0 .24in; }
+      .sheet-title { font-size: 18pt; }
+      .sheet-subtitle { font-size: 10pt; }
+      .name-date { display: flex; }
+      .table-wrap, table, tr { break-inside: avoid; page-break-inside: avoid; }
+      table { font-size: var(--print-font-size, 13pt) !important; }
+      tr { height: var(--row-height-print, .57in) !important; }
+      th, td { border-color: #8895a3; }
+      thead th, tbody th { background: #e9edf1 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      thead th:first-child { background: #dce4ee !important; }
+      .sheet-footer { font-size: 8pt; padding-top: .14in; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <a class="back" href="https://kidmath.mjt.pub/">← Math Tools</a>
+    <div class="screen-heading">
+      <h1>Multiplication Table</h1>
+      <p class="description">Choose the first and last numbers, then print a clean multiplication chart.</p>
+    </div>
+
+    <section class="controls" aria-label="Table settings">
+      <div class="field">
+        <label for="first">First number</label>
+        <input id="first" type="number" value="1" step="1" inputmode="numeric">
+      </div>
+      <div class="field">
+        <label for="last">Last number</label>
+        <input id="last" type="number" value="12" step="1" inputmode="numeric">
+      </div>
+      <label class="option" for="practice"><input id="practice" type="checkbox"> Blank practice table</label>
+      <div class="grow"></div>
+      <div class="actions">
+        <button id="reset" type="button">Reset</button>
+        <button class="primary" id="print" type="button">Print table</button>
+      </div>
+    </section>
+    <p class="hint">Fits on one portrait letter-size page. In the print dialog, choose portrait orientation and 100% scale. You can also save as PDF.</p>
+    <p class="message" id="message" role="status" aria-live="polite"></p>
+
+    <section class="sheet" id="sheet" aria-label="Printable multiplication table">
+      <div class="sheet-head">
+        <div>
+          <h2 class="sheet-title">Multiplication Table</h2>
+          <p class="sheet-subtitle" id="range-label">1 through 12</p>
+        </div>
+        <div class="name-date" id="name-date"><span>Name <span class="name-line"></span></span></div>
+      </div>
+      <div class="table-wrap">
+        <table id="table" aria-label="Multiplication table from 1 to 12"></table>
+      </div>
+      <div class="sheet-footer">kidmath.mjt.pub</div>
+    </section>
+  </main>
+  <script>
+    (() => {
+      'use strict';
+      const firstInput = document.querySelector('#first');
+      const lastInput = document.querySelector('#last');
+      const practiceInput = document.querySelector('#practice');
+      const table = document.querySelector('#table');
+      const sheet = document.querySelector('#sheet');
+      const message = document.querySelector('#message');
+      const rangeLabel = document.querySelector('#range-label');
+      const nameDate = document.querySelector('#name-date');
+      const printButton = document.querySelector('#print');
+      const MAX_COUNT = 40;
+      function sizeScreenCells() {
+        const columns = Number(sheet.style.getPropertyValue('--columns')) || 13;
+        const width = table.parentElement.getBoundingClientRect().width;
+        if (!width) return;
+        sheet.style.setProperty('--row-height-screen', `${(width / columns).toFixed(2)}px`);
+        sheet.style.setProperty('--mobile-font-size', `${Math.max(5, Math.min(16, width / columns * .44)).toFixed(1)}px`);
+      }
+
+      function render() {
+        const first = Number(firstInput.value);
+        const last = Number(lastInput.value);
+        const validIntegers = firstInput.value.trim() !== '' && lastInput.value.trim() !== '' &&
+          Number.isSafeInteger(first) && Number.isSafeInteger(last);
+        const count = last - first + 1;
+        if (!validIntegers || first > last || count > MAX_COUNT) {
+          message.textContent = !validIntegers ? 'Enter a whole number in each field.' :
+            first > last ? 'The last number must be at least the first number.' :
+              `Choose ${MAX_COUNT} numbers or fewer so the table remains printable.`;
+          printButton.disabled = true;
+          return;
+        }
+        message.textContent = count > 24 ? 'This is a dense table; the printed numbers will be small.' : '';
+        printButton.disabled = false;
+        const practice = practiceInput.checked;
+        const values = Array.from({length: count}, (_, i) => first + i);
+        const columns = count + 1;
+        sheet.style.setProperty('--columns', String(columns));
+        sheet.style.setProperty('--row-height-print', `${(7.45 / columns).toFixed(5)}in`);
+        sheet.style.setProperty('--font-size', `${Math.max(7, Math.min(19, 255 / columns)).toFixed(1)}px`);
+        sheet.style.setProperty('--print-font-size', `${Math.max(5.5, Math.min(15, 195 / columns)).toFixed(1)}pt`);
+        rangeLabel.textContent = `${first} through ${last}${practice ? ' · Practice' : ''}`;
+        nameDate.style.display = practice ? '' : 'none';
+        // The print stylesheet displays the name line only in practice mode.
+        nameDate.classList.toggle('practice-mode', practice);
+        table.setAttribute('aria-label', `Multiplication table from ${first} to ${last}${practice ? ', blank answers' : ''}`);
+
+        const makeCell = (tag, value, scope, className) => {
+          const cell = document.createElement(tag);
+          if (scope) cell.scope = scope;
+          if (className) cell.className = className;
+          cell.textContent = String(value);
+          return cell;
+        };
+        const thead = document.createElement('thead');
+        const headRow = document.createElement('tr');
+        headRow.appendChild(makeCell('th', '×', 'col'));
+        for (const value of values) headRow.appendChild(makeCell('th', value, 'col'));
+        thead.appendChild(headRow);
+        const tbody = document.createElement('tbody');
+        for (const rowValue of values) {
+          const tr = document.createElement('tr');
+          tr.appendChild(makeCell('th', rowValue, 'row'));
+          for (const colValue of values) {
+            const cell = makeCell('td', practice ? '\u00a0' : rowValue * colValue);
+            if (practice) cell.classList.add('empty-answer');
+            tr.appendChild(cell);
+          }
+          tbody.appendChild(tr);
+        }
+        table.replaceChildren(thead, tbody);
+        sizeScreenCells();
+        const existing = document.querySelector('#practice-print-style');
+        if (existing) existing.remove();
+        if (practice) {
+          const style = document.createElement('style');
+          style.id = 'practice-print-style';
+          style.textContent = '@media print { #name-date { display: flex !important; } }';
+          document.head.appendChild(style);
+        } else {
+          const style = document.createElement('style');
+          style.id = 'practice-print-style';
+          style.textContent = '@media print { #name-date { display: none !important; } }';
+          document.head.appendChild(style);
+        }
+      }
+      firstInput.addEventListener('input', render);
+      lastInput.addEventListener('input', render);
+      practiceInput.addEventListener('change', render);
+      document.querySelector('#reset').addEventListener('click', () => {
+        firstInput.value = 1;
+        lastInput.value = 12;
+        practiceInput.checked = false;
+        render();
+      });
+      printButton.addEventListener('click', () => { if (!printButton.disabled) window.print(); });
+      window.addEventListener('resize', sizeScreenCells);
+      render();
+    })();
+  </script>
+</body>
+</html>
