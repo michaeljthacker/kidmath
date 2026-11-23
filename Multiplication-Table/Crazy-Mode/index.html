@@ -6,59 +6,235 @@
 <meta name="color-scheme" content="light">
 <title>Crazy Mode | Kid Math</title>
 <style>
-:root{color-scheme:light;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color:#213043;background:#f5f6f8}
-*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}
-:focus-visible{outline:3px solid #9ac6ff;outline-offset:2px}
-.app{max-width:1080px;margin:auto;padding:30px 20px 64px}
-.back{display:inline-block;margin-bottom:16px;color:#435c76;font-size:.875rem;text-decoration:none}
-.back:hover{text-decoration:underline}
-h1{font-size:clamp(1.7rem,4vw,2.2rem);letter-spacing:-.04em;line-height:1.15;margin:0 0 8px}
-h1 span{color:#5144ae}.intro{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:22px}
-.intro p{margin:0;color:#58677b;line-height:1.5}.toolbar{display:flex;gap:9px;flex-wrap:wrap}
-.btn{min-height:42px;padding:10px 15px;background:#fff;border:1px solid #c3ccd7;border-radius:7px;color:#27384d;font-weight:650}
-.btn:hover{background:#f1f4f8}.btn.crazy{background:#5144ae;border-color:#5144ae;color:#fff}.btn.crazy:hover{background:#403396}
-.btn.print{background:#203e5d;border-color:#203e5d;color:#fff}.btn.print:hover{background:#152b44}.btn:disabled{opacity:.5;cursor:not-allowed}
-.settings{display:grid;gap:10px;margin-bottom:15px}details{background:#fff;border:1px solid #dde3eb;border-radius:10px;overflow:hidden}
-summary{padding:15px 18px;cursor:pointer;font-weight:700}summary::marker{color:#687b91}details[open] summary{border-bottom:1px solid #e7ebef}
-.inside{padding:18px}.axes,.two-col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.axis{border:1px solid #e2e8f0;border-radius:8px;padding:15px}.axis h3{font-size:1rem;margin:0 0 12px}
-.fields{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.field{display:grid;gap:6px;min-width:0}
-.field label{font-size:.82rem;font-weight:650;color:#4b5a6b}.field input,.field select{min-width:0;width:100%;min-height:41px;padding:10px 9px;border:1px solid #bec9d5;border-radius:6px;background:#fff;color:#263749}
-.order{margin-top:12px}.help{font-size:.81rem;color:#637386;margin:12px 0 0;line-height:1.45}
-.group-title{font-size:.86rem;font-weight:700;margin:0 0 10px}.checks{display:grid;gap:11px}
-.check{display:flex;align-items:flex-start;gap:9px;line-height:1.35;font-size:.91rem;cursor:pointer}.check input{width:17px;height:17px;margin:2px 0 0;flex-shrink:0;accent-color:#324a69}
-.note,.warning{margin:0 0 14px 2px;font-size:.83rem;line-height:1.45}.note{color:#64748b}.warning{color:#a43b32;font-weight:650}
-.paper{width:8.5in;max-width:100%;min-height:10.15in;margin:0 auto 22px;background:#fff;border:1px solid #e0e6ed;box-shadow:0 7px 25px #25364a0b;padding:.5in .42in .4in}
-[hidden]{display:none!important}.paper-header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:end;gap:8px;margin-bottom:16px}
-.paper-title{font-size:1.35rem;letter-spacing:-.03em;font-weight:750;line-height:1.22;margin:0 0 4px;color:#17283c;overflow-wrap:anywhere}
-.paper-subtitle{font-size:.82rem;color:#607086;margin:0}.name-date{font-size:.76rem;color:#43556d;display:flex;gap:12px;flex-wrap:wrap;padding:0 0 14px}
-.line{display:inline-block;vertical-align:baseline;border-bottom:1px solid #8290a1;width:130px;height:.7em;margin-left:4px}.date-line{width:88px}
-.table-scroll{width:100%;overflow-x:auto}table{width:100%;table-layout:fixed;border-collapse:collapse;text-align:center;font-variant-numeric:tabular-nums;color:#253649;font-size:var(--screen-font-size,15px)}
-th,td{border:1px solid #aebac7;text-align:center;padding:0 2px;overflow:hidden;white-space:nowrap}tr{height:var(--screen-row-height,47px)}
-thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:first-child{background:#dfe8f1}tbody td{font-weight:500}
-.no-grid td,.no-grid th{border:0}.no-grid thead th{border-bottom:2px solid #9dabb9}.no-grid tbody th,.no-grid thead th:first-child{border-right:2px solid #9dabb9}
-.blank span{display:inline-block;width:70%;max-width:50px;border-bottom:1px solid #b4bdc9;height:1.2em}
-.zero{background:#ecf1f5}.one{background:#e8f0fb}.square{background:#f9efd3}
-.paper-footer{margin-top:12px;text-align:right;color:#8793a3;font-size:.7rem}.key-tag{display:inline-block;padding:3px 7px;border-radius:5px;background:#edf1f7;font-size:.67rem;letter-spacing:.04em;text-transform:uppercase;font-weight:750;color:#52657a;margin-bottom:5px}
-@media(max-width:720px){.app{padding:23px 12px 46px}.intro{margin-bottom:16px}.toolbar{width:100%}.toolbar .btn{flex:1 1 auto}.inside{padding:12px}.axes,.two-col{grid-template-columns:1fr}.axis{padding:12px}.paper{padding:20px 10px 18px;min-height:0}.paper-title{font-size:1.08rem}.paper-header{margin-bottom:12px}.line{width:94px}.date-line{width:58px}}
-@page{size:letter portrait;margin:.4in}
-@media print{
- :root,html,body{background:#fff!important}html,body{margin:0!important;padding:0!important}
- .app{width:100%;max-width:none;padding:0;margin:0}.back,.intro,.settings,.note,.warning{display:none!important}
- .paper{width:100%;max-width:none;min-height:0;border:0;box-shadow:none;padding:0;margin:0;break-inside:avoid;page-break-inside:avoid}
- .key-sheet:not([hidden]){break-before:page;page-break-before:always}
- .paper-header{margin-bottom:.13in}.paper-title{font-size:18pt}.paper-subtitle{font-size:9pt}
- .name-date{font-size:9pt;padding-bottom:.12in}.table-scroll{overflow:visible}
- table{font-size:var(--print-font-size,12pt)!important}
- tr{height:var(--print-row-height,.53in)!important;break-inside:avoid}th,td{border-color:#8592a2}
- thead th,tbody th,.zero,.one,.square{-webkit-print-color-adjust:exact;print-color-adjust:exact}
- .paper-footer{font-size:8pt;margin-top:.12in}
+:root {
+  color-scheme: light;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  color: #213043;
+  background: #f5f6f8;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid #9ac6ff; outline-offset: 2px; }
+
+.app { max-width: 1080px; margin: auto; padding: 30px 20px 64px; }
+.back {
+  display: inline-block; margin-bottom: 16px; color: #435c76;
+  font-size: .875rem; text-decoration: none;
+}
+.back:hover { text-decoration: underline; }
+h1 {
+  font-size: clamp(1.7rem, 4vw, 2.2rem);
+  letter-spacing: -.04em; line-height: 1.15; margin: 0 0 8px;
+}
+h1 span { color: #5144ae; }
+.intro {
+  display: flex; align-items: end; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap; margin-bottom: 22px;
+}
+.intro p { margin: 0; color: #58677b; line-height: 1.5; }
+.toolbar { display: flex; gap: 9px; flex-wrap: wrap; }
+
+.btn {
+  min-height: 42px; padding: 10px 15px; background: #fff;
+  border: 1px solid #c3ccd7; border-radius: 7px;
+  color: #27384d; font-weight: 650;
+}
+.btn:hover { background: #f1f4f8; }
+.btn.crazy { background: #5144ae; border-color: #5144ae; color: #fff; }
+.btn.crazy:hover { background: #403396; }
+.btn.print { background: #203e5d; border-color: #203e5d; color: #fff; }
+.btn.print:hover { background: #152b44; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.settings { display: grid; gap: 10px; margin-bottom: 15px; }
+details {
+  background: #fff; border: 1px solid #dde3eb;
+  border-radius: 10px; overflow: hidden;
+}
+summary { padding: 15px 18px; cursor: pointer; font-weight: 700; }
+summary::marker { color: #687b91; }
+details[open] summary { border-bottom: 1px solid #e7ebef; }
+.inside { padding: 18px; }
+.axes, .two-col {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;
+}
+.axis { border: 1px solid #e2e8f0; border-radius: 8px; padding: 15px; }
+.axis h3 { font-size: 1rem; margin: 0 0 12px; }
+.fields {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px;
+}
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label { font-size: .82rem; font-weight: 650; color: #4b5a6b; }
+.field input, .field select {
+  min-width: 0; width: 100%; min-height: 41px;
+  padding: 10px 9px; border: 1px solid #bec9d5;
+  border-radius: 6px; background: #fff; color: #263749;
+}
+
+/* Sign toggle: works even when the phone keyboard has no minus key. */
+.signed-input { position: relative; min-width: 0; }
+.signed-input input {
+  padding-right: 33px;
+  appearance: textfield;
+  -moz-appearance: textfield;
+}
+.signed-input input::-webkit-inner-spin-button,
+.signed-input input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.sign-toggle {
+  position: absolute; right: 4px; top: 4px; bottom: 4px;
+  width: 27px; padding: 0;
+  border: 1px solid #d0d8e2; border-radius: 5px;
+  background: #edf2f7; color: #243e5d;
+  font-weight: 750; line-height: 1;
+}
+.sign-toggle:hover { background: #dfe8f2; }
+
+.order { margin-top: 12px; }
+.help {
+  font-size: .81rem; color: #637386; margin: 12px 0 0; line-height: 1.45;
+}
+.group-title { font-size: .86rem; font-weight: 700; margin: 0 0 10px; }
+.checks { display: grid; gap: 11px; }
+.check {
+  display: flex; align-items: flex-start; gap: 9px;
+  line-height: 1.35; font-size: .91rem; cursor: pointer;
+}
+.check input {
+  width: 17px; height: 17px; margin: 2px 0 0;
+  flex-shrink: 0; accent-color: #324a69;
+}
+.note, .warning {
+  margin: 0 0 14px 2px; font-size: .83rem; line-height: 1.45;
+}
+.note { color: #64748b; }
+.warning { color: #a43b32; font-weight: 650; }
+
+.paper {
+  width: 8.5in; max-width: 100%; min-height: 10.15in;
+  margin: 0 auto 22px; background: #fff;
+  border: 1px solid #e0e6ed; box-shadow: 0 7px 25px #25364a0b;
+  padding: .5in .42in .4in;
+}
+[hidden] { display: none !important; }
+.paper-header {
+  display: flex; flex-wrap: wrap; justify-content: space-between;
+  align-items: end; gap: 8px; margin-bottom: 16px;
+}
+.paper-title {
+  font-size: 1.35rem; letter-spacing: -.03em; font-weight: 750;
+  line-height: 1.22; margin: 0 0 4px;
+  color: #17283c; overflow-wrap: anywhere;
+}
+.paper-subtitle { font-size: .82rem; color: #607086; margin: 0; }
+.name-date {
+  font-size: .76rem; color: #43556d;
+  display: flex; gap: 12px; flex-wrap: wrap; padding: 0 0 14px;
+}
+.line {
+  display: inline-block; vertical-align: baseline;
+  border-bottom: 1px solid #8290a1;
+  width: 130px; height: .7em; margin-left: 4px;
+}
+.date-line { width: 88px; }
+.table-scroll { width: 100%; overflow-x: auto; }
+table {
+  width: 100%; table-layout: fixed; border-collapse: collapse;
+  text-align: center; font-variant-numeric: tabular-nums;
+  color: #253649; font-size: var(--screen-font-size, 15px);
+}
+th, td {
+  border: 1px solid #aebac7; text-align: center;
+  padding: 0 2px; overflow: hidden; white-space: nowrap;
+}
+tr { height: var(--screen-row-height, 47px); }
+thead th, tbody th {
+  background: #edf2f7; color: #203b58; font-weight: 750;
+}
+thead th:first-child { background: #dfe8f1; }
+tbody td { font-weight: 500; }
+.no-grid td, .no-grid th { border: 0; }
+.no-grid thead th { border-bottom: 2px solid #9dabb9; }
+.no-grid tbody th, .no-grid thead th:first-child {
+  border-right: 2px solid #9dabb9;
+}
+.blank span {
+  display: inline-block; width: 70%; max-width: 50px;
+  border-bottom: 1px solid #b4bdc9; height: 1.2em;
+}
+.zero { background: #ecf1f5; }
+.one { background: #e8f0fb; }
+.square { background: #f9efd3; }
+.paper-footer {
+  margin-top: 12px; text-align: right;
+  color: #8793a3; font-size: .7rem;
+}
+.key-tag {
+  display: inline-block; padding: 3px 7px;
+  border-radius: 5px; background: #edf1f7;
+  font-size: .67rem; letter-spacing: .04em;
+  text-transform: uppercase; font-weight: 750; color: #52657a;
+  margin-bottom: 5px;
+}
+
+@media (max-width: 720px) {
+  .app { padding: 23px 12px 46px; }
+  .intro { margin-bottom: 16px; }
+  .toolbar { width: 100%; }
+  .toolbar .btn { flex: 1 1 auto; }
+  .inside { padding: 12px; }
+  .axes, .two-col { grid-template-columns: 1fr; }
+  .axis { padding: 12px; }
+  .paper { padding: 20px 10px 18px; min-height: 0; }
+  .paper-title { font-size: 1.08rem; }
+  .paper-header { margin-bottom: 12px; }
+  .line { width: 94px; }
+  .date-line { width: 58px; }
+}
+
+@page { size: letter portrait; margin: .4in; }
+@media print {
+  :root, html, body { background: #fff !important; }
+  html, body { margin: 0 !important; padding: 0 !important; }
+  .app { width: 100%; max-width: none; padding: 0; margin: 0; }
+  .back, .intro, .settings, .note, .warning {
+    display: none !important;
+  }
+  .paper {
+    width: 100%; max-width: none; min-height: 0;
+    border: 0; box-shadow: none; padding: 0; margin: 0;
+    break-inside: avoid; page-break-inside: avoid;
+  }
+  .key-sheet:not([hidden]) {
+    break-before: page; page-break-before: always;
+  }
+  .paper-header { margin-bottom: .13in; }
+  .paper-title { font-size: 18pt; }
+  .paper-subtitle { font-size: 9pt; }
+  .name-date { font-size: 9pt; padding-bottom: .12in; }
+  .table-scroll { overflow: visible; }
+  table { font-size: var(--print-font-size, 12pt) !important; }
+  tr {
+    height: var(--print-row-height, .53in) !important;
+    break-inside: avoid;
+  }
+  th, td { border-color: #8592a2; }
+  thead th, tbody th, .zero, .one, .square {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .paper-footer { font-size: 8pt; margin-top: .12in; }
 }
 </style>
 </head>
 <body>
 <main class="app">
   <a class="back" href="../">← Classic multiplication table</a>
+
   <header class="intro">
     <div>
       <h1>Multiplication Table: <span>CRAZY MODE</span></h1>
@@ -66,9 +242,11 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
     </div>
     <div class="toolbar">
       <button class="btn crazy" id="go-crazy" type="button">🎲 Go Crazy!</button>
+      <button class="btn" id="reset" type="button">Reset Simple</button>
       <button class="btn print" id="print" type="button">Print</button>
     </div>
   </header>
+
   <section class="settings" aria-label="Table options">
     <details open>
       <summary>1. Numbers — horizontal and vertical</summary>
@@ -77,56 +255,126 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
           <div class="axis">
             <h3>↔ Horizontal (columns)</h3>
             <div class="fields">
-              <div class="field"><label for="c-start">Start</label><input id="c-start" type="number" value="1" step="any"></div>
-              <div class="field"><label for="c-end">End</label><input id="c-end" type="number" value="12" step="any"></div>
-              <div class="field"><label for="c-step">Step size</label><input id="c-step" type="number" value="1" step="any"></div>
+              <div class="field">
+                <label for="c-start">Start</label>
+                <div class="signed-input">
+                  <input id="c-start" type="number" inputmode="decimal" value="1" step="any">
+                  <button class="sign-toggle" type="button" data-target="c-start"
+                    aria-label="Change sign of horizontal start" title="Switch positive / negative">±</button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="c-end">End</label>
+                <div class="signed-input">
+                  <input id="c-end" type="number" inputmode="decimal" value="12" step="any">
+                  <button class="sign-toggle" type="button" data-target="c-end"
+                    aria-label="Change sign of horizontal end" title="Switch positive / negative">±</button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="c-step">Step size</label>
+                <div class="signed-input">
+                  <input id="c-step" type="number" inputmode="decimal" value="1" step="any">
+                  <button class="sign-toggle" type="button" data-target="c-step"
+                    aria-label="Change sign of horizontal step" title="Switch positive / negative">±</button>
+                </div>
+              </div>
             </div>
-            <div class="field order"><label for="c-order">Order</label><select id="c-order">
-              <option value="entered">As entered</option><option value="asc">Ascending</option>
-              <option value="desc">Descending</option><option value="random">Random shuffle</option>
-            </select></div>
+            <div class="field order">
+              <label for="c-order">Order</label>
+              <select id="c-order">
+                <option value="entered">As entered</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+                <option value="random">Random shuffle</option>
+              </select>
+            </div>
           </div>
+
           <div class="axis">
             <h3>↕ Vertical (rows)</h3>
             <div class="fields">
-              <div class="field"><label for="r-start">Start</label><input id="r-start" type="number" value="1" step="any"></div>
-              <div class="field"><label for="r-end">End</label><input id="r-end" type="number" value="12" step="any"></div>
-              <div class="field"><label for="r-step">Step size</label><input id="r-step" type="number" value="1" step="any"></div>
+              <div class="field">
+                <label for="r-start">Start</label>
+                <div class="signed-input">
+                  <input id="r-start" type="number" inputmode="decimal" value="1" step="any">
+                  <button class="sign-toggle" type="button" data-target="r-start"
+                    aria-label="Change sign of vertical start" title="Switch positive / negative">±</button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="r-end">End</label>
+                <div class="signed-input">
+                  <input id="r-end" type="number" inputmode="decimal" value="12" step="any">
+                  <button class="sign-toggle" type="button" data-target="r-end"
+                    aria-label="Change sign of vertical end" title="Switch positive / negative">±</button>
+                </div>
+              </div>
+              <div class="field">
+                <label for="r-step">Step size</label>
+                <div class="signed-input">
+                  <input id="r-step" type="number" inputmode="decimal" value="1" step="any">
+                  <button class="sign-toggle" type="button" data-target="r-step"
+                    aria-label="Change sign of vertical step" title="Switch positive / negative">±</button>
+                </div>
+              </div>
             </div>
-            <div class="field order"><label for="r-order">Order</label><select id="r-order">
-              <option value="entered">As entered</option><option value="asc">Ascending</option>
-              <option value="desc">Descending</option><option value="random">Random shuffle</option>
-            </select></div>
+            <div class="field order">
+              <label for="r-order">Order</label>
+              <select id="r-order">
+                <option value="entered">As entered</option>
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+                <option value="random">Random shuffle</option>
+              </select>
+            </div>
           </div>
         </div>
-        <p class="help">Decimals and negative numbers work. Start can be greater than End; “As entered” follows that direction. Step size must be positive. Maximum: 40 numbers per axis.</p>
+        <p class="help">
+          Decimals and negative numbers work. Start can be greater than End;
+          "As entered" follows that direction. Step size can be positive or
+          negative; its magnitude sets the spacing, and Start/End determine
+          direction. Maximum: 40 numbers per axis.
+        </p>
       </div>
     </details>
+
     <details>
       <summary>2. Randomness &amp; practice</summary>
       <div class="inside two-col">
         <div>
-          <div class="field"><label for="answers">Answers</label><select id="answers">
-            <option value="0">Show all answers</option>
-            <option value="100">Hide all answers</option>
-            <option value="25">Hide random 25%</option>
-            <option value="50">Hide random 50%</option>
-            <option value="75">Hide random 75%</option>
-          </select></div>
+          <div class="field">
+            <label for="answers">Answers</label>
+            <select id="answers">
+              <option value="0">Show all answers</option>
+              <option value="100">Hide all answers</option>
+              <option value="25">Hide random 25%</option>
+              <option value="50">Hide random 50%</option>
+              <option value="75">Hide random 75%</option>
+            </select>
+          </div>
           <p class="help">The hidden cells stay in place until you shuffle again.</p>
         </div>
         <div>
           <p class="group-title">Random controls</p>
           <button class="btn" id="shuffle" type="button">↻ Shuffle again</button>
-          <p class="help">Reorders random axes and chooses new practice blanks. Go Crazy picks a bounded challenge, not enormous numbers.</p>
+          <p class="help">
+            Reorders random axes and chooses new practice blanks.
+            Go Crazy picks a bounded challenge, not enormous numbers.
+          </p>
         </div>
       </div>
     </details>
+
     <details>
       <summary>3. Appearance &amp; printing</summary>
       <div class="inside two-col">
         <div>
-          <div class="field"><label for="custom-title">Worksheet title</label><input id="custom-title" maxlength="80" type="text" value="Multiplication Table" placeholder="e.g. Decimal Challenge"></div>
+          <div class="field">
+            <label for="custom-title">Worksheet title</label>
+            <input id="custom-title" maxlength="80" type="text"
+              value="Multiplication Table" placeholder="e.g. Decimal Challenge">
+          </div>
           <div class="checks" style="margin-top:14px">
             <label class="check"><input id="name-date" type="checkbox"> Include name and date lines</label>
             <label class="check"><input id="grid" type="checkbox" checked> Show grid lines</label>
@@ -140,46 +388,84 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
             <label class="check"><input id="highlight-one" type="checkbox"> Multiplication by 1</label>
             <label class="check"><input id="highlight-square" type="checkbox"> Squares (same number on both axes)</label>
           </div>
-          <div style="margin-top:17px"><button class="btn" id="reset" type="button">Reset everything</button></div>
         </div>
       </div>
     </details>
   </section>
-  <p class="note" id="note" role="status" aria-live="polite">Classic 1–12 multiplication table · US Letter portrait.</p>
+
+  <p class="note" id="note" role="status" aria-live="polite">
+    Classic 1–12 multiplication table · US Letter portrait.
+  </p>
   <p class="warning" id="warning" role="alert" hidden></p>
+
   <section class="paper" id="worksheet" aria-label="Printable worksheet">
-    <header class="paper-header"><div><h2 class="paper-title" id="worksheet-title">Multiplication Table</h2><p class="paper-subtitle" id="worksheet-subtitle">Columns: 1–12 by 1 · Rows: 1–12 by 1</p></div></header>
-    <div class="name-date" id="name-date-line" hidden><span>Name <span class="line"></span></span><span>Date <span class="line date-line"></span></span></div>
-    <div class="table-scroll"><table id="worksheet-table" aria-label="Multiplication table"></table></div>
+    <header class="paper-header">
+      <div>
+        <h2 class="paper-title" id="worksheet-title">Multiplication Table</h2>
+        <p class="paper-subtitle" id="worksheet-subtitle">
+          Columns: 1–12 by 1 · Rows: 1–12 by 1
+        </p>
+      </div>
+    </header>
+    <div class="name-date" id="name-date-line" hidden>
+      <span>Name <span class="line"></span></span>
+      <span>Date <span class="line date-line"></span></span>
+    </div>
+    <div class="table-scroll">
+      <table id="worksheet-table" aria-label="Multiplication table"></table>
+    </div>
     <footer class="paper-footer">kidmath.mjt.pub · Crazy Mode</footer>
   </section>
-  <section class="paper key-sheet" id="answer-key-sheet" aria-label="Printable answer key" hidden>
-    <header class="paper-header"><div><span class="key-tag">Answer key</span><h2 class="paper-title" id="key-title">Multiplication Table</h2><p class="paper-subtitle" id="key-subtitle"></p></div></header>
-    <div class="table-scroll"><table id="key-table" aria-label="Answer key multiplication table"></table></div>
-    <footer class="paper-footer">kidmath.mjt.pub · Crazy Mode · Answer key</footer>
+
+  <section class="paper key-sheet" id="answer-key-sheet"
+    aria-label="Printable answer key" hidden>
+    <header class="paper-header">
+      <div>
+        <span class="key-tag">Answer key</span>
+        <h2 class="paper-title" id="key-title">Multiplication Table</h2>
+        <p class="paper-subtitle" id="key-subtitle"></p>
+      </div>
+    </header>
+    <div class="table-scroll">
+      <table id="key-table" aria-label="Answer key multiplication table"></table>
+    </div>
+    <footer class="paper-footer">
+      kidmath.mjt.pub · Crazy Mode · Answer key
+    </footer>
   </section>
 </main>
+
 <script>
 (() => {
   'use strict';
+
   const $ = id => document.getElementById(id);
   const MAX_AXIS = 40;
   let seed = newSeed();
   let previousPreset = -1;
   let columnCount = 13;
   let longest = 3;
+
   const ids = [
-    'c-start','c-end','c-step','c-order','r-start','r-end','r-step','r-order',
+    'c-start','c-end','c-step','c-order',
+    'r-start','r-end','r-step','r-order',
     'answers','custom-title','name-date','grid','answer-key-option',
     'highlight-zero','highlight-one','highlight-square'
   ];
+
   const defaults = {
-    'c-start':1,'c-end':12,'c-step':1,'c-order':'entered',
-    'r-start':1,'r-end':12,'r-step':1,'r-order':'entered',
-    answers:'0','custom-title':'Multiplication Table','name-date':false,grid:true,
-    'answer-key-option':false,'highlight-zero':false,'highlight-one':false,'highlight-square':false
+    'c-start':1, 'c-end':12, 'c-step':1, 'c-order':'entered',
+    'r-start':1, 'r-end':12, 'r-step':1, 'r-order':'entered',
+    answers:'0',
+    'custom-title':'Multiplication Table',
+    'name-date':false, grid:true,
+    'answer-key-option':false,
+    'highlight-zero':false,
+    'highlight-one':false,
+    'highlight-square':false
   };
-  // These are deliberately curated: 8–17 labels per axis, numbers <= 150.
+
+  // Curated challenges: modest numbers and manageable table sizes.
   const presets = [
     {title:'Quarter Quest',c:[.25,3,.25,'random'],r:[2,24,2,'desc'],hide:'50'},
     {title:'Negative Zone',c:[-6,6,1,'random'],r:[-10,10,2,'random'],hide:'25',square:true},
@@ -194,7 +480,11 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
     {title:'Step Switch',c:[2,26,2,'random'],r:[1.5,12,1.5,'desc'],hide:'50'},
     {title:'Positive? Negative?',c:[-2.5,2.5,.5,'random'],r:[-3,3,.75,'desc'],hide:'75',square:true}
   ];
-  function newSeed() { return (Math.random() * 4294967296) >>> 0; }
+
+  function newSeed() {
+    return (Math.random() * 4294967296) >>> 0;
+  }
+
   function seededRandom(number) {
     let state = number >>> 0;
     return () => {
@@ -205,6 +495,7 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
       return ((x ^ (x >>> 14)) >>> 0) / 4294967296;
     };
   }
+
   function shuffled(original, rng) {
     const a = [...original];
     for (let i = a.length - 1; i > 0; i--) {
@@ -213,68 +504,104 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
     }
     return a;
   }
+
   function tidy(n) {
     return Math.abs(n) < 1e-12 ? 0 : Number(n.toFixed(10));
   }
+
   function display(n) {
     return Number(n.toFixed(12)).toLocaleString('en-US', {
-      useGrouping:false, maximumFractionDigits:12
+      useGrouping: false,
+      maximumFractionDigits: 12
     });
   }
+
   function getAxis(prefix) {
     const fields = ['start','end','step'].map(part => $(prefix+'-'+part));
     if (fields.some(f => f.value.trim() === '')) {
       throw Error('Enter a start, end, and step size for both axes.');
     }
-    const [start,end,step] = fields.map(f => Number(f.value));
-    if (![start,end,step].every(Number.isFinite)) throw Error('Please enter finite numbers.');
-    if (step <= 0) throw Error('Step size must be greater than zero.');
-    const amount = Math.floor(Math.abs(end-start)/step+1e-9)+1;
-    if (!Number.isFinite(amount) || amount > MAX_AXIS) {
-      throw Error(`Maximum ${MAX_AXIS} numbers per axis. Increase the step size or shorten the range.`);
+
+    const [start, end, step] = fields.map(f => Number(f.value));
+    if (![start,end,step].every(Number.isFinite)) {
+      throw Error('Please enter finite numbers.');
     }
+    if (step === 0) {
+      throw Error('Step size cannot be zero.');
+    }
+
+    // Direction comes from the endpoints; sign of step is optional.
+    // For example, 17 to 10 by 0.5 and by -0.5 both descend.
+    const spacing = Math.abs(step);
+    const amount = Math.floor(Math.abs(end-start)/spacing+1e-9)+1;
+    if (!Number.isFinite(amount) || amount > MAX_AXIS) {
+      throw Error(
+        `Maximum ${MAX_AXIS} numbers per axis. Increase the step size or shorten the range.`
+      );
+    }
+
     const direction = Math.sign(end-start);
-    let values = Array.from({length:amount}, (_,i) => tidy(start+i*step*direction));
+    let values = Array.from({length:amount}, (_,i) =>
+      tidy(start+i*spacing*direction)
+    );
+
     if (new Set(values).size !== values.length) {
       throw Error('Step size is too small for this range. Try a larger step.');
     }
+
     const order = $(prefix+'-order').value;
     if (order === 'asc') values.sort((a,b) => a-b);
     if (order === 'desc') values.sort((a,b) => b-a);
-    if (order === 'random') values = shuffled(values, seededRandom(seed+(prefix==='c'?101:202)));
+    if (order === 'random') {
+      values = shuffled(values, seededRandom(seed+(prefix==='c'?101:202)));
+    }
+
     return {start,end,step,values};
   }
+
   function axisText(axis) {
     return `${display(axis.start)}–${display(axis.end)} by ${display(axis.step)}`;
   }
+
   function cell(tag, text, scope) {
     const element = document.createElement(tag);
     element.textContent = text;
     if (scope) element.scope = scope;
     return element;
   }
+
   function fillTable(target, rows, columns, blankCells, key) {
     const thead = document.createElement('thead');
     const top = document.createElement('tr');
     top.appendChild(cell('th','×','col'));
-    for (const x of columns) top.appendChild(cell('th',display(x),'col'));
+    for (const x of columns) {
+      top.appendChild(cell('th',display(x),'col'));
+    }
     thead.appendChild(top);
+
     const tbody = document.createElement('tbody');
     const zero = $('highlight-zero').checked;
     const one = $('highlight-one').checked;
     const square = $('highlight-square').checked;
+
     rows.forEach((y,r) => {
       const tr = document.createElement('tr');
       tr.appendChild(cell('th',display(y),'row'));
+
       columns.forEach((x,c) => {
         const td = document.createElement('td');
+
         if (zero && (x===0 || y===0)) td.classList.add('zero');
         else if (square && x===y) td.classList.add('square');
         else if (one && (x===1 || y===1)) td.classList.add('one');
+
         if (!key && blankCells.has(r*columns.length+c)) {
           td.classList.add('blank');
           const line = document.createElement('span');
-          line.setAttribute('aria-label', `${display(y)} times ${display(x)}: blank`);
+          line.setAttribute(
+            'aria-label',
+            `${display(y)} times ${display(x)}: blank`
+          );
           td.appendChild(line);
         } else {
           td.textContent = display(x*y);
@@ -283,8 +610,10 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
       });
       tbody.appendChild(tr);
     });
+
     target.replaceChildren(thead,tbody);
   }
+
   function resizeTables() {
     for (const paper of [$('worksheet'),$('answer-key-sheet')]) {
       if (paper.hidden) continue;
@@ -294,24 +623,39 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
       const width = Math.max(wrap.clientWidth,columnCount*minCell);
       const size = width/columnCount;
       table.style.minWidth = `${Math.ceil(columnCount*minCell)}px`;
-      table.style.setProperty('--screen-row-height',`${Math.max(23,Math.min(56,size)).toFixed(1)}px`);
-      table.style.setProperty('--screen-font-size',`${Math.max(8.5,Math.min(17,size*.38)).toFixed(1)}px`);
+      table.style.setProperty(
+        '--screen-row-height',
+        `${Math.max(23,Math.min(56,size)).toFixed(1)}px`
+      );
+      table.style.setProperty(
+        '--screen-font-size',
+        `${Math.max(8.5,Math.min(17,size*.38)).toFixed(1)}px`
+      );
     }
   }
+
   function render() {
     const warning = $('warning');
+
     try {
       const horizontal = getAxis('c');
       const vertical = getAxis('r');
-      const cols = horizontal.values, rows = vertical.values;
+      const cols = horizontal.values;
+      const rows = vertical.values;
       const total = cols.length*rows.length;
+
       const pct = Number($('answers').value);
       const missing = Math.round(total*pct/100);
-      const indices = shuffled(Array.from({length:total},(_,i)=>i),seededRandom(seed+303));
+      const indices = shuffled(
+        Array.from({length:total},(_,i)=>i),
+        seededRandom(seed+303)
+      );
       const blanks = new Set(indices.slice(0,missing));
+
       const title = $('custom-title').value.trim() || 'Multiplication Table';
       const subtitle = `Columns: ${axisText(horizontal)} · Rows: ${axisText(vertical)}`;
       const hasKey = $('answer-key-option').checked && missing > 0;
+
       warning.hidden = true;
       warning.textContent = '';
       $('worksheet-title').textContent = title;
@@ -320,50 +664,65 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
       $('key-title').textContent = title;
       $('key-subtitle').textContent = subtitle;
       $('answer-key-sheet').hidden = !hasKey;
+
       for (const paper of [$('worksheet'),$('answer-key-sheet')]) {
         paper.classList.toggle('no-grid',!$('grid').checked);
       }
+
       fillTable($('worksheet-table'),rows,cols,blanks,false);
       if (hasKey) fillTable($('key-table'),rows,cols,blanks,true);
+
       columnCount = cols.length+1;
-      longest = Math.max(1,
+      longest = Math.max(
+        1,
         ...cols.map(x=>display(x).length),
         ...rows.map(y=>display(y).length),
         ...rows.flatMap(y=>cols.map(x=>display(x*y).length))
       );
-      // US Letter portrait: grid <= 8.1 inches tall, with space for header/footer.
+
+      // Fit each grid on US Letter portrait, leaving header/footer space.
       const printRows = rows.length+1;
       const rowHeight = Math.min(.60,7.65/columnCount,8.1/printRows);
       const availablePoints = 7.65*72/columnCount;
-      const fontSize = Math.max(5.2,Math.min(14.5,availablePoints/(longest*.55+.85)));
+      const fontSize = Math.max(
+        5.2,
+        Math.min(14.5,availablePoints/(longest*.55+.85))
+      );
+
       for (const paper of [$('worksheet'),$('answer-key-sheet')]) {
         paper.style.setProperty('--print-row-height',`${rowHeight.toFixed(4)}in`);
         paper.style.setProperty('--print-font-size',`${fontSize.toFixed(2)}pt`);
       }
       resizeTables();
       $('print').disabled = false;
+
       $('note').textContent = `${cols.length} columns × ${rows.length} rows`+
         (missing?` · ${missing} hidden answers`:' · All answers shown')+
         (hasKey?' · Answer key on page 2':'')+
         (Math.max(printRows,columnCount)>24?' · Small text at this size':'')+
         ' · US Letter portrait';
+
     } catch (error) {
       warning.textContent = error.message;
       warning.hidden = false;
       $('print').disabled = true;
-      $('note').textContent = 'Correct the inputs above to update and print the table.';
+      $('note').textContent =
+        'Correct the inputs above to update and print the table.';
     }
   }
+
   function setOption(id,value) {
     const input = $(id);
     if (input.type==='checkbox') input.checked = Boolean(value);
     else input.value = String(value);
   }
+
   function goCrazy() {
     const choices = presets.map((_,i)=>i).filter(i=>i!==previousPreset);
     const selected = choices[Math.floor(Math.random()*choices.length)];
     previousPreset = selected;
     const preset = presets[selected];
+
     ['start','end','step','order'].forEach((field,i) => {
       setOption('c-'+field,preset.c[i]);
       setOption('r-'+field,preset.r[i]);
@@ -376,21 +735,43 @@ thead th,tbody th{background:#edf2f7;color:#203b58;font-weight:750}thead th:firs
     setOption('highlight-zero',Boolean(preset.zero));
     setOption('highlight-one',false);
     setOption('highlight-square',Boolean(preset.square));
+
     seed = newSeed();
     render();
   }
+
   function reset() {
     Object.entries(defaults).forEach(([id,value])=>setOption(id,value));
     previousPreset = -1;
     seed = newSeed();
     render();
   }
+
+  // Update the table whenever settings change.
   ids.forEach(id => $(id).addEventListener('input',render));
+
+  // A dedicated sign button for every numeric input.
+  document.querySelectorAll('.sign-toggle').forEach(button => {
+    button.addEventListener('click', () => {
+      const input = $(button.dataset.target);
+      input.value = input.value.trim() === ''
+        ? '-1'
+        : String(-Number(input.value));
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+    });
+  });
+
   $('go-crazy').addEventListener('click',goCrazy);
-  $('shuffle').addEventListener('click',()=>{ seed = newSeed(); render(); });
+  $('shuffle').addEventListener('click',()=>{
+    seed = newSeed();
+    render();
+  });
   $('reset').addEventListener('click',reset);
-  $('print').addEventListener('click',()=>{ if (!$('print').disabled) window.print(); });
+  $('print').addEventListener('click',()=>{
+    if (!$('print').disabled) window.print();
+  });
   window.addEventListener('resize',resizeTables);
+
   render();
 })();
 </script>
