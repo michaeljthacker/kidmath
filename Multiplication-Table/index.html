@@ -44,6 +44,22 @@
       background: #fff; border: 1px solid #e0e5eb; box-shadow: 0 6px 25px #1f29370c;
       min-height: 10.15in;
     }
+    .crazy-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 43px;
+      padding: 11px 16px;
+      border: 1px solid #5144ae;
+      border-radius: 6px;
+      color: #5144ae;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .crazy-link:hover {
+      background: #f0edff;
+    }
     .sheet-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 8px; margin-bottom: 20px; }
     .sheet-title { font-size: 1.35rem; line-height: 1.25; font-weight: 750; letter-spacing: -.035em; margin: 0 0 4px; color: #17283c; }
     .sheet-subtitle { font-size: .87rem; color: #5e6978; margin: 0; }
@@ -123,6 +139,7 @@
       <div class="actions">
         <button id="reset" type="button">Reset</button>
         <button class="primary" id="print" type="button">Print table</button>
+        <a href="./Crazy-Mode/" class="crazy-link">🎲 Try CRAZY MODE!</a>
       </div>
     </section>
     <p class="hint">Fits on one portrait letter-size page. In the print dialog, choose portrait orientation and 100% scale. You can also save as PDF.</p>
